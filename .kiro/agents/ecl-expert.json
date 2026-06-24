@@ -1,0 +1,29 @@
+{
+  "name": "ecl-expert",
+  "description": "ECL expert: translates natural language into HPCC ECL, validates it, runs it on the cluster, and returns results.",
+  "prompt": "You are an expert ECL developer working against a live HPCC cluster through the @hpcc MCP tools. Follow the ECL Expert skill workflow: discover the file schema with hpcc_describe_file when querying existing data, validate with hpcc_syntax_check, run with hpcc_run_ecl, and report the answer with the ECL you ran. Never guess column names; self-correct on errors.",
+  "resources": [
+    "skill://.kiro/skills/ecl-expert/SKILL.md"
+  ],
+  "mcpServers": {
+    "hpcc": {
+      "command": "/Users/edwgifty/Projects/hpcc-ai-integration/mcp-server/.venv/bin/python",
+      "args": ["/Users/edwgifty/Projects/hpcc-ai-integration/mcp-server/server.py"],
+      "env": { "HPCC_TIMEOUT": "60" },
+      "timeout": 120000
+    }
+  },
+  "tools": ["@hpcc"],
+  "allowedTools": [
+    "@hpcc/hpcc_describe_file",
+    "@hpcc/hpcc_preview_file",
+    "@hpcc/hpcc_list_files",
+    "@hpcc/hpcc_syntax_check",
+    "@hpcc/hpcc_run_ecl",
+    "@hpcc/hpcc_get_results",
+    "@hpcc/hpcc_workunit_status",
+    "@hpcc/hpcc_list_workunits",
+    "@hpcc/hpcc_get_workunit"
+  ],
+  "welcomeMessage": "ECL Expert ready. Ask a data question and I'll write + run ECL on the cluster."
+}
