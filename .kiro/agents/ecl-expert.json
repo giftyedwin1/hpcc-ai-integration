@@ -9,7 +9,11 @@
     "hpcc": {
       "command": "/Users/edwgifty/Projects/hpcc-ai-integration/mcp-server/.venv/bin/python",
       "args": ["/Users/edwgifty/Projects/hpcc-ai-integration/mcp-server/server.py"],
-      "env": { "HPCC_TIMEOUT": "60" },
+      "env": {
+        "HPCC_TIMEOUT": "60",
+        "HPCC_ESP_URL": "http://localhost:8010",
+        "HPCC_WSECL_URL": "http://localhost:8002"
+      },
       "timeout": 120000
     }
   },
