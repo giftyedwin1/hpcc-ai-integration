@@ -41,6 +41,14 @@ hpcc-ai-integration/
      with `/mcp show` (lists `hpcc`), then `/agents` to select **ECL Expert**.
      Runs locally, so it reaches the same `kubectl` port-forwards as Kiro.
 
+> **Pointing at a real cluster:** by default every client targets
+> `http://localhost:8010` / `:8002`. To use a different cluster, set
+> `HPCC_ESP_URL` and `HPCC_WSECL_URL` (and optionally `HPCC_CLUSTER`,
+> `HPCC_USER`/`HPCC_PASSWORD`) in that client's `env`: `.mcp.json` (Copilot CLI),
+> `.kiro/agents/ecl-expert.json` (Kiro), or the connector UI (Quick). All clients
+> read these from the same `server.py`; see `mcp-server/README.md` for the full
+> list. Avoid committing private cluster hostnames to a public repo.
+
 ## What's shared vs client-specific
 
 - **Shared:** the MCP server (`mcp-server/`) — all clients launch the same
