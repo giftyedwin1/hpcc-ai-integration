@@ -2,7 +2,7 @@
 
 Connects HPCC Systems clusters to AI assistants for natural-language → ECL
 workflows. The core is a Model Context Protocol (MCP) server exposing HPCC tools;
-on top of it are ready-to-use "ECL Expert" configurations for two clients.
+on top of it are ready-to-use "ECL Expert" configurations for three clients.
 
 ## Layout
 
@@ -17,9 +17,13 @@ hpcc-ai-integration/
 │   └── ecl-expert/
 │       └── SKILL.md   # import via Agents & skills → Skills → Import from file
 │
-└── .kiro/             # Kiro CLI integration (native discovery location)
-    ├── agents/ecl-expert.json     # launch: kiro-cli chat --agent ecl-expert
-    └── skills/ecl-expert/SKILL.md # referenced by the agent via skill://
+├── .kiro/             # Kiro CLI integration (native discovery location)
+│   ├── agents/ecl-expert.json     # launch: kiro-cli chat --agent ecl-expert
+│   └── skills/ecl-expert/SKILL.md # referenced by the agent via skill://
+│
+├── .github/agents/    # GitHub Copilot CLI custom agent (tested)
+│   └── ecl-expert.agent.md        # select via /agents in `copilot`
+└── .mcp.json          # Copilot CLI MCP server config (mcpServers + type: stdio)
 ```
 
 ## Quick start
@@ -32,16 +36,25 @@ hpcc-ai-integration/
      `quick/ecl-expert/SKILL.md` as a Skill.
    - **Kiro CLI** — run `kiro-cli chat --agent ecl-expert` from this directory
      (the agent in `.kiro/` embeds the server and references the skill).
+   - **GitHub Copilot CLI** — run `copilot` from this directory. It picks up the
+     `hpcc` server from `.mcp.json` and the agent from `.github/agents/`. Verify
+     with `/mcp show` (lists `hpcc`), then `/agents` to select **ECL Expert**.
+     Runs locally, so it reaches the same `kubectl` port-forwards as Kiro.
 
 ## What's shared vs client-specific
 
-- **Shared:** the MCP server (`mcp-server/`) — both clients launch the same
+- **Shared:** the MCP server (`mcp-server/`) — all clients launch the same
   `server.py` and get the same 16 HPCC tools.
-- **Client-specific:** the "ECL Expert" skill/agent. Quick and Kiro use different
-  skill formats and tool-naming conventions, so each has its own copy:
+- **Client-specific:** the "ECL Expert" skill/agent. Each client uses a different
+  format and tool-naming convention, so each has its own copy:
   - Quick: markdown-header `SKILL.md`, `hpcc_cluster__<tool>` names, `load_skill`.
   - Kiro: YAML-frontmatter `SKILL.md`, `@hpcc/<tool>` names, loaded via `skill://`.
+  - Copilot CLI: `.agent.md` agent (frontmatter + prompt body, no separate skill),
+    `hpcc/*` tool refs, MCP server in `.mcp.json` (`mcpServers` key, `type: stdio`).
 
 > Note: Amazon Quick's MCP client uses **tools only** (resources/prompts are
 > ignored), so the Quick experience is delivered through the imported Skill.
-> Kiro CLI supports the full MCP protocol plus its own agents and skills.
+> Kiro CLI and GitHub Copilot CLI support the full MCP protocol plus their own
+> agents. The Copilot CLI agent runs locally (interactive, like Kiro), reaching
+> the same port-forwarded cluster; it is not the GitHub.com cloud coding agent,
+> which runs on a hosted runner and could not reach a local cluster.

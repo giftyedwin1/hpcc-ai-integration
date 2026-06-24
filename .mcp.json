@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "hpcc": {
+      "type": "stdio",
+      "command": "/Users/edwgifty/Projects/hpcc-ai-integration/mcp-server/.venv/bin/python",
+      "args": ["/Users/edwgifty/Projects/hpcc-ai-integration/mcp-server/server.py"],
+      "env": { "HPCC_TIMEOUT": "60" },
+      "tools": ["*"]
+    }
+  }
+}
